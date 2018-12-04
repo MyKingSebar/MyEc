@@ -1,0 +1,2 @@
+include ':example', ':lattle_annonations', ':lattle_compiler', ':latte_core', ':latte_ec'
+//,':convenientbanner'
