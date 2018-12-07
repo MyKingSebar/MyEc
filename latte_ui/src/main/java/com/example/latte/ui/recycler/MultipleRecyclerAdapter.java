@@ -1,7 +1,6 @@
 package com.example.latte.ui.recycler;
 
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -12,9 +11,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.example.latte.R;
 import com.example.latte.ui.banner.BannerCreator;
+import com.example.latte.ui.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +20,11 @@ import java.util.List;
 public class MultipleRecyclerAdapter extends
         BaseMultiItemQuickAdapter<MultipleItemEntity, MultipleViewHolder>
         implements
-        BaseQuickAdapter.SpanSizeLookup ,
-        OnItemClickListener
-{
+        BaseQuickAdapter.SpanSizeLookup,
+        OnItemClickListener {
 
     //确保初始化一次Banner，防止重复Item加载
-    private boolean mIsInitBanner=false;
+    private boolean mIsInitBanner = false;
 
 
     protected MultipleRecyclerAdapter(List<MultipleItemEntity> data) {
@@ -110,11 +107,11 @@ public class MultipleRecyclerAdapter extends
                 holder.setText(R.id.tv_multiple, text);
                 break;
             case ItemType.BANNER:
-                if(!mIsInitBanner){
-                    bannerImages=entity.getField(MultipleFields.BANNERS);
-                    final ConvenientBanner<String> convenientBanner=holder.getView(R.id.banner_recycler_item);
-                    BannerCreator.setDefault(convenientBanner,bannerImages,this);
-                    mIsInitBanner=true;
+                if (!mIsInitBanner) {
+                    bannerImages = entity.getField(MultipleFields.BANNERS);
+                    final ConvenientBanner<String> convenientBanner = holder.getView(R.id.banner_recycler_item);
+                    BannerCreator.setDefault(convenientBanner, bannerImages, this);
+                    mIsInitBanner = true;
                 }
                 break;
             default:

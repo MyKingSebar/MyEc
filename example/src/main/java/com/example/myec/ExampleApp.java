@@ -1,6 +1,7 @@
 package com.example.myec;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.example.latte.app.Latte;
 import com.example.latte.ec.database.DatabaseManager;
@@ -12,7 +13,7 @@ import com.facebook.stetho.Stetho;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 
-public class ExampleApp extends Application {
+public class ExampleApp extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();

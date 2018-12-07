@@ -8,7 +8,7 @@ import com.bigkoo.convenientbanner.holder.Holder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.latte.R;
+import com.example.latte.ui.R;
 
 public class ImageHolder extends Holder<String> {
 

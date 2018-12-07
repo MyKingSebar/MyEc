@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.bigkoo.convenientbanner.holder.Holder;
-import com.example.latte.R;
+import com.example.latte.ui.R;
 
 public class LauncherHolderCreator implements CBViewHolderCreator {
     @Override
