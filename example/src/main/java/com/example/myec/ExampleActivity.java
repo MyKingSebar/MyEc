@@ -9,21 +9,16 @@ import com.example.latte.activities.ProxyActivity;
 import com.example.latte.app.Latte;
 import com.example.latte.delegates.LatteDelegate;
 import com.example.latte.ec.launcher.LauncherDelegate;
-import com.example.latte.ec.launcher.LauncherScrollDelegate;
 import com.example.latte.ec.main.EcBottomDelegate;
 import com.example.latte.ec.sign.ISignListener;
-import com.example.latte.ec.sign.SignInDelegate;
-import com.example.latte.ec.sign.SignUpDelegate;
 import com.example.latte.ui.launcher.ILauncherListener;
 import com.example.latte.ui.launcher.OnLauncherFinishTag;
 
 import qiu.niorgai.StatusBarCompat;
 
 public class ExampleActivity extends ProxyActivity implements
-
-        ISignListener ,
-        ILauncherListener
-{
+        ISignListener,
+        ILauncherListener {
 
 
     @Override
@@ -34,7 +29,7 @@ public class ExampleActivity extends ProxyActivity implements
             actionBar.hide();
         }
         Latte.getConfigurator().withActivity(this);
-        StatusBarCompat.translucentStatusBar(this,true);
+        StatusBarCompat.translucentStatusBar(this, true);
     }
 
     @Override
@@ -57,19 +52,20 @@ public class ExampleActivity extends ProxyActivity implements
 
     @Override
     public void onLauncherFinish(OnLauncherFinishTag tag) {
-        Toast.makeText(this, "onLauncherFinish"+tag, Toast.LENGTH_LONG).show();
-        switch (tag){
+        Toast.makeText(this, "onLauncherFinish" + tag, Toast.LENGTH_LONG).show();
+        switch (tag) {
             case SIGNED:
-                Toast.makeText(this,"启动成功，用户登录了",Toast.LENGTH_LONG).show();
-                startWithPop(new EcBottomDelegate());
+                Toast.makeText(this, "启动成功，用户登录了", Toast.LENGTH_LONG).show();
+                getSupportDelegate().startWithPop(new EcBottomDelegate());
                 break;
             case NOT_SIGNED:
-                Toast.makeText(this,"启动成功，用户没登录",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "启动成功，用户没登录", Toast.LENGTH_LONG).show();
 //                startWithPop(new SignInDelegate());
-                startWithPop(new EcBottomDelegate());
+                getSupportDelegate().startWithPop(new EcBottomDelegate());
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
     }
+
 }

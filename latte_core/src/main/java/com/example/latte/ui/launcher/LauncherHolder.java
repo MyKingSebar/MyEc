@@ -3,11 +3,9 @@ package com.example.latte.ui.launcher;
 
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.bigkoo.convenientbanner.holder.Holder;
 import com.example.latte.R;
-import com.example.latte.app.Latte;
 
 public class LauncherHolder extends Holder<Integer> {
 

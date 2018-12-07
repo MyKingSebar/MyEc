@@ -28,7 +28,7 @@ public class ExampleApp extends Application {
                 .withJavascriptInterface("latte")
                 .withWebEvent("test",new TestEvent())
                 //添加Cookie同步拦截器
-                .withApiHost("www.baidu.com/")
+                .withWebHost("www.baidu.com/")
                 .withInterceptor(new AddCookieInterceptor())
                 .configure();
         initStetho();

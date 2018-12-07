@@ -1,2 +1,2 @@
-include ':example', ':lattle_annonations', ':lattle_compiler', ':latte_core', ':latte_ec'
-//,':convenientbanner'
+include ':example', ':latte_annotations', ':latte_compiler', ':latte_core', ':latte_ec', ':latte_ui'
+
