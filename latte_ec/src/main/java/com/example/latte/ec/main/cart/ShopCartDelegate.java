@@ -15,6 +15,8 @@ import com.alibaba.fastjson.JSON;
 import com.example.latte.delegates.bottom.BottomItemDelegate;
 import com.example.latte.ec.R;
 import com.example.latte.ec.R2;
+import com.example.latte.ec.pay.FastPay;
+import com.example.latte.ec.pay.IAlPayResultListener;
 import com.example.latte.net.RestClient;
 import com.example.latte.net.callback.ISuccess;
 import com.example.latte.ui.recycler.MultipleItemEntity;
@@ -28,7 +30,7 @@ import java.util.WeakHashMap;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class ShopCartDelegate extends BottomItemDelegate implements ISuccess,ICartItemListener {
+public class ShopCartDelegate extends BottomItemDelegate implements ISuccess, ICartItemListener, IAlPayResultListener {
 
     private ShopCartAdapter mAdapter = null;
     //购物车数量标记
@@ -109,11 +111,11 @@ public class ShopCartDelegate extends BottomItemDelegate implements ISuccess,ICa
         final String orderUrl = "你的生成订单的API";
         final WeakHashMap<String, Object> orderParams = new WeakHashMap<>();
         //加入你的参数
-        orderParams.put("userid","");
-        orderParams.put("amount",0.01);
-        orderParams.put("comment","测试支付");
-        orderParams.put("type",1);
-        orderParams.put("ordertype",0);
+        orderParams.put("userid", "");
+        orderParams.put("amount", 0.01);
+        orderParams.put("comment", "测试支付");
+        orderParams.put("type", 1);
+        orderParams.put("ordertype", 0);
         RestClient.builder()
                 .url(orderUrl)
                 .loader(getContext())
@@ -124,10 +126,10 @@ public class ShopCartDelegate extends BottomItemDelegate implements ISuccess,ICa
                         //进行具体的支付
                         LatteLogger.d("ORDER", response);
                         final int orderId = JSON.parseObject(response).getInteger("result");
-//                        FastPay.create(ShopCartDelegate.this)
-//                                .setPayResultListener(ShopCartDelegate.this)
-//                                .setOrderId(orderId)
-//                                .beginPayDialog();
+                        FastPay.create(ShopCartDelegate.this)
+                                .setPayResultListener(ShopCartDelegate.this)
+                                .setOrderId(orderId)
+                                .beginPayDialog();
                     }
                 })
                 .build()
@@ -191,4 +193,30 @@ public class ShopCartDelegate extends BottomItemDelegate implements ISuccess,ICa
         final double price = mAdapter.getTotalPrice();
         mTvTotalPrice.setText(String.valueOf(price));
     }
+
+    @Override
+    public void onPaySuccess() {
+
+    }
+
+    @Override
+    public void onPaying() {
+
+    }
+
+    @Override
+    public void onPayFail() {
+
+    }
+
+    @Override
+    public void onPayCancel() {
+
+    }
+
+    @Override
+    public void onPayConnectError() {
+
+    }
+
 }

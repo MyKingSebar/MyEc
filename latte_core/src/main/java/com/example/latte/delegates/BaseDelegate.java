@@ -20,7 +20,7 @@ import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragmentDelegate;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
-public abstract class BaseDelegete extends Fragment implements ISupportFragment {
+public abstract class BaseDelegate extends Fragment implements ISupportFragment {
 
     private final SupportFragmentDelegate DELEGATE = new SupportFragmentDelegate(this);
     protected FragmentActivity _mActivity = null;

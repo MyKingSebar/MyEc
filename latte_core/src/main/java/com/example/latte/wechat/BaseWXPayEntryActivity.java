@@ -1,6 +1,7 @@
 package com.example.latte.wechat;
 
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 
 
@@ -15,6 +16,7 @@ public abstract class BaseWXPayEntryActivity extends BaseWXActivity {
     protected abstract void onPayFail();
 
     protected abstract void onPayCancel();
+
 
     @Override
     public void onResp(BaseResp baseResp) {
@@ -34,4 +36,6 @@ public abstract class BaseWXPayEntryActivity extends BaseWXActivity {
             }
         }
     }
+
+
 }
