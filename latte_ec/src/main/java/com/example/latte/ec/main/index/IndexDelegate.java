@@ -9,20 +9,26 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.latte.delegates.bottom.BottomItemDelegate;
 import com.example.latte.ec.R;
 import com.example.latte.ec.R2;
 import com.example.latte.ec.main.EcBottomDelegate;
+import com.example.latte.ec.main.index.search.SearchDelegate;
 import com.example.latte.ui.recycler.BaseDecoration;
 import com.example.latte.ui.recycler.MultipleFields;
 import com.example.latte.ui.recycler.MultipleItemEntity;
 import com.example.latte.ui.refresh.RefreshHandler;
+import com.example.latte.util.callback.CallbackManager;
+import com.example.latte.util.callback.CallbackType;
+import com.example.latte.util.callback.IGlobalCallback;
 import com.joanzapata.iconify.widget.IconTextView;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
-public class IndexDelegate extends BottomItemDelegate {
+public class IndexDelegate extends BottomItemDelegate implements View.OnFocusChangeListener {
 
     @BindView(R2.id.rv_index)
     RecyclerView mRecyclerView = null;
@@ -37,9 +43,23 @@ public class IndexDelegate extends BottomItemDelegate {
 
     private RefreshHandler mRefreshHandler = null;
 
+    @OnClick(R2.id.icon_index_scan)
+    void onCLickScanOrCode() {
+        startScanWithCheck(this.getParentDelegate());
+    }
+
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-        mRefreshHandler = RefreshHandler.create(mRefreshLayout,mRecyclerView,new IndexDataConverter());
+        mRefreshHandler = RefreshHandler.create(mRefreshLayout, mRecyclerView, new IndexDataConverter());
+        CallbackManager.getInstance()
+                .addCallback(CallbackType.ON_SCAN, new IGlobalCallback<String>() {
+                    @Override
+                    public void executeCallback(@Nullable String args) {
+                        Toast.makeText(getContext(),args,Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        mSearchView.setOnFocusChangeListener(this);
 
     }
 
@@ -54,12 +74,12 @@ public class IndexDelegate extends BottomItemDelegate {
         mRefreshLayout.setProgressViewOffset(true, 120, 300);
     }
 
-    private void initRecyclerView(){
-        final GridLayoutManager manager=new GridLayoutManager(getContext(),4);
+    private void initRecyclerView() {
+        final GridLayoutManager manager = new GridLayoutManager(getContext(), 4);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addItemDecoration
-                (BaseDecoration.create(ContextCompat.getColor(getContext(),R.color.app_background),5));
-        final EcBottomDelegate ecBottomDelegate=getParentDelegate();
+                (BaseDecoration.create(ContextCompat.getColor(getContext(), R.color.app_background), 5));
+        final EcBottomDelegate ecBottomDelegate = getParentDelegate();
         mRecyclerView.addOnItemTouchListener(IndexItemClickListener.create(ecBottomDelegate));
     }
 
@@ -77,4 +97,10 @@ public class IndexDelegate extends BottomItemDelegate {
     }
 
 
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            getParentDelegate().getSupportDelegate().start(new SearchDelegate());
+        }
+    }
 }

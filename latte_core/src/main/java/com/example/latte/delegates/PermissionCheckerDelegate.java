@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.example.latte.ui.camera.CameraImageBean;
 import com.example.latte.ui.camera.LatteCamera;
 import com.example.latte.ui.camera.RequestCodes;
+import com.example.latte.ui.scanner.ScannerDelegate;
 import com.example.latte.util.callback.CallbackManager;
 import com.example.latte.util.callback.CallbackType;
 import com.example.latte.util.callback.IGlobalCallback;
@@ -28,7 +30,7 @@ import permissions.dispatcher.RuntimePermissions;
 public abstract class PermissionCheckerDelegate extends BaseDelegate {
 
     //不是直接调用方法
-    @NeedsPermission({Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void startCamera() {
         LatteCamera.start(this);
     }
@@ -38,28 +40,28 @@ public abstract class PermissionCheckerDelegate extends BaseDelegate {
         PermissionCheckerDelegatePermissionsDispatcher.startCameraWithCheck(this);
     }
 
-//    //扫描二维码(不直接调用)
-//    @NeedsPermission(Manifest.permission.CAMERA)
-//    void startScan(BaseDelegate delegate) {
-//        delegate.getSupportDelegate().startForResult(new ScannerDelegate(), RequestCodes.SCAN);
-//    }
+    //扫描二维码(不直接调用)
+    @NeedsPermission(Manifest.permission.CAMERA)
+    void startScan(BaseDelegate delegate) {
+        delegate.getSupportDelegate().startForResult(new ScannerDelegate(), RequestCodes.SCAN);
+    }
 
-//    public void startScanWithCheck(BaseDelegate delegate) {
-//        PermissionCheckerDelegatePermissionsDispatcher.startScanWithCheck(this, delegate);
-//    }
+    public void startScanWithCheck(BaseDelegate delegate) {
+        PermissionCheckerDelegatePermissionsDispatcher.startScanWithCheck(this, delegate);
+    }
 
 
-    @OnPermissionDenied({Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    @OnPermissionDenied({Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void onCameraDenied() {
         Toast.makeText(getContext(), "不允许拍照", Toast.LENGTH_LONG).show();
     }
 
-    @OnNeverAskAgain({Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    @OnNeverAskAgain({Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void onCameraNever() {
         Toast.makeText(getContext(), "永久拒绝权限", Toast.LENGTH_LONG).show();
     }
 
-    @OnShowRationale({Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void onCameraRationale(PermissionRequest request) {
         showRationaleDialog(request);
     }
@@ -114,8 +116,7 @@ public abstract class PermissionCheckerDelegate extends BaseDelegate {
                 case RequestCodes.CROP_PHOTO:
                     final Uri cropUri = UCrop.getOutput(data);
                     //拿到剪裁后的数据进行处理
-                    @SuppressWarnings("unchecked")
-                    final IGlobalCallback<Uri> callback = CallbackManager
+                    @SuppressWarnings("unchecked") final IGlobalCallback<Uri> callback = CallbackManager
                             .getInstance()
                             .getCallback(CallbackType.ON_CROP);
                     if (callback != null) {
@@ -131,4 +132,19 @@ public abstract class PermissionCheckerDelegate extends BaseDelegate {
         }
     }
 
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+        if (requestCode == RequestCodes.SCAN) {
+            if (data != null) {
+                final String qrCode = data.getString("SCAN_RESULT");
+                final IGlobalCallback<String> callback = CallbackManager
+                        .getInstance()
+                        .getCallback(CallbackType.ON_SCAN);
+                if (callback != null) {
+                    callback.executeCallback(qrCode);
+                }
+            }
+        }
+    }
 }

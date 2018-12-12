@@ -12,9 +12,11 @@ import com.example.latte.net.rx.AddCookieInterceptor;
 import com.example.latte.util.callback.CallbackManager;
 import com.example.latte.util.callback.CallbackType;
 import com.example.latte.util.callback.IGlobalCallback;
+import com.example.myec.event.ShareEvent;
 import com.example.myec.event.TestEvent;
 import com.facebook.stetho.Stetho;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.mob.MobSDK;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -34,6 +36,7 @@ public class ExampleApp extends MultiDexApplication {
                 .withWeChatAppSecret("你的微信AppSecret")
                 .withJavascriptInterface("latte")
                 .withWebEvent("test", new TestEvent())
+                .withWebEvent("share", new ShareEvent())
                 //添加Cookie同步拦截器
                 .withWebHost("www.baidu.com/")
                 .withInterceptor(new AddCookieInterceptor())
@@ -45,6 +48,8 @@ public class ExampleApp extends MultiDexApplication {
         //开启极光推送
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+
+
 
 
         CallbackManager.getInstance()
