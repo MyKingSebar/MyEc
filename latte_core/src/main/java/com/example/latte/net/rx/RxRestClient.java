@@ -4,6 +4,13 @@ import android.content.Context;
 
 import com.example.latte.net.HttpMethod;
 import com.example.latte.net.RestCreator;
+import com.example.latte.net.RestService;
+import com.example.latte.net.callback.IError;
+import com.example.latte.net.callback.IFailure;
+import com.example.latte.net.callback.IRequest;
+import com.example.latte.net.callback.ISuccess;
+import com.example.latte.net.callback.RequestCallbacks;
+import com.example.latte.net.download.DownloadHandler;
 import com.example.latte.ui.loader.LatteLoader;
 import com.example.latte.ui.loader.LoaderStyle;
 
@@ -16,6 +23,9 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.http.Url;
 
 public class RxRestClient {
 
@@ -28,11 +38,11 @@ public class RxRestClient {
 
 
     public RxRestClient(String url,
-                        Map<String, Object> params,
-                        RequestBody body,
-                        File file,
-                        Context context,
-                        LoaderStyle loaderStyle) {
+                      Map<String, Object> params,
+                      RequestBody body,
+                      File file,
+                      Context context,
+                      LoaderStyle loaderStyle) {
         this.URL = url;
         PARAMS.putAll(params);
         this.BODY = body;
@@ -48,6 +58,7 @@ public class RxRestClient {
     private Observable<String> request(HttpMethod method) {
         final RxRestService service = RestCreator.getRxRestService();
         Observable<String> observable=null;
+
 
 
         if (LOADER_STYLE != null) {
@@ -78,7 +89,7 @@ public class RxRestClient {
                         RequestBody.create(MediaType.parse(MultipartBody.FORM.toString()), FILE);
                 final MultipartBody.Part body =
                         MultipartBody.Part.createFormData("file", FILE.getName());
-                observable=service.upload(URL,body);
+                observable = RestCreator.getRxRestService().upload(URL, body);
                 break;
             default:
                 break;
@@ -88,8 +99,8 @@ public class RxRestClient {
     }
 
 
-    public final Observable<String> get() {
 
+    public final Observable<String> get() {
         return request(HttpMethod.GET);
     }
 
@@ -118,12 +129,14 @@ public class RxRestClient {
     public final Observable<String> delete() {
         return request(HttpMethod.DELETE);
     }
+
     public final Observable<String> upload() {
         return request(HttpMethod.UPLOAD);
     }
-    public final Observable<ResponseBody> download() {
-        return RestCreator.getRxRestService().download(URL,PARAMS);
 
+    public final Observable<ResponseBody> download() {
+        final  Observable<ResponseBody> responseBodyObservable=RestCreator.getRxRestService().download(URL,PARAMS);
+return responseBodyObservable;
 
     }
 }

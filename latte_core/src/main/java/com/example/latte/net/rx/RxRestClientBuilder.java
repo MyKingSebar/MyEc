@@ -3,6 +3,10 @@ package com.example.latte.net.rx;
 import android.content.Context;
 
 import com.example.latte.net.RestCreator;
+import com.example.latte.net.callback.IError;
+import com.example.latte.net.callback.IFailure;
+import com.example.latte.net.callback.IRequest;
+import com.example.latte.net.callback.ISuccess;
 import com.example.latte.ui.loader.LoaderStyle;
 
 import java.io.File;
@@ -78,9 +82,7 @@ public class RxRestClientBuilder {
 
 
     public final RxRestClient build() {
-        return new RxRestClient(mUrl, PARAMS,
-                mBody,mFile,mContext,
-                mLoaderStyle);
+        return new RxRestClient(mUrl, PARAMS, mBody, mFile, mContext, mLoaderStyle);
     }
 
 }
